@@ -1,0 +1,81 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# dotenv environment variable files and config files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+dist
+
+.temp
+.cache
+
+# IDE and editor files
+.vscode
+.vscode-test
+.idea/
+*.swp
+*.swo
+*~
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+.nx
+
+# DXT
+*.dxt
+
+# Web extension dist
+web-ext-artifacts/
+*.xpi
+*.zip
+
+# Built JS files in firefox-extension root
+firefox-extension/background.js
+firefox-extension/options.js
+
+# Test coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# Claude Code files
+.claude/
+
+# Temporary build scripts
+firefox-extension/package-extension.ps1
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
