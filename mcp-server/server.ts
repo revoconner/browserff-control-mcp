@@ -53,17 +53,22 @@ mcpServer.tool(
   {},
   async () => {
     const openTabs = await browserApi.getTabList();
+    const tabList = openTabs.map((tab, i) => {
+      const lastAccessed = tab.lastAccessed ? dayjs(tab.lastAccessed).fromNow() : "unknown";
+      const title = tab.title
+        ? (tab.title.length > 50 ? tab.title.slice(0, 50) + '...' : tab.title)
+        : '(No title)';
+      const url = tab.url
+        ? (tab.url.length > 70 ? tab.url.slice(0, 70) + '...' : tab.url)
+        : '(No URL)';
+      return `${i + 1}. [ID:${tab.id}] ${title}\n   ${url} (${lastAccessed})`;
+    }).join('\n\n');
+
     return {
-      content: openTabs.map((tab) => {
-        let lastAccessed = "unknown";
-        if (tab.lastAccessed) {
-          lastAccessed = dayjs(tab.lastAccessed).fromNow(); // LLM-friendly time ago
-        }
-        return {
-          type: "text",
-          text: `tab id=${tab.id}, tab url=${tab.url}, tab title=${tab.title}, last accessed=${lastAccessed}`,
-        };
-      }),
+      content: [{
+        type: "text",
+        text: `Open tabs (${openTabs.length} total):\n\n${tabList}`,
+      }],
     };
   }
 );
@@ -77,17 +82,22 @@ mcpServer.tool(
       searchQuery
     );
     if (browserHistory.length > 0) {
+      const historyList = browserHistory.map((item, i) => {
+        const lastVisited = item.lastVisitTime ? dayjs(item.lastVisitTime).fromNow() : "unknown";
+        const title = item.title
+          ? (item.title.length > 50 ? item.title.slice(0, 50) + '...' : item.title)
+          : '(No title)';
+        const url = item.url
+          ? (item.url.length > 70 ? item.url.slice(0, 70) + '...' : item.url)
+          : '(No URL)';
+        return `${i + 1}. ${title}\n   ${url} (${lastVisited})`;
+      }).join('\n\n');
+
       return {
-        content: browserHistory.map((item) => {
-          let lastVisited = "unknown";
-          if (item.lastVisitTime) {
-            lastVisited = dayjs(item.lastVisitTime).fromNow(); // LLM-friendly time ago
-          }
-          return {
-            type: "text",
-            text: `url=${item.url}, title="${item.title}", lastVisitTime=${lastVisited}`,
-          };
-        }),
+        content: [{
+          type: "text",
+          text: `Browser history (${browserHistory.length} items):\n\n${historyList}`,
+        }],
       };
     } else {
       // If nothing was found for the search query, hint the AI to list
@@ -375,11 +385,19 @@ mcpServer.tool(
   async ({ query }) => {
     const bookmarks = await browserApi.searchBookmarks(query);
     if (bookmarks.length > 0) {
+      const bookmarkList = bookmarks.map((bookmark: any, i: number) => {
+        const title = bookmark.title.length > 50 ? bookmark.title.slice(0, 50) + '...' : bookmark.title;
+        const url = bookmark.url
+          ? (bookmark.url.length > 70 ? bookmark.url.slice(0, 70) + '...' : bookmark.url)
+          : 'N/A (folder)';
+        return `${i + 1}. [ID:${bookmark.id}] ${title}\n   ${url} (${bookmark.type})`;
+      }).join('\n\n');
+
       return {
-        content: bookmarks.map((bookmark: any) => ({
+        content: [{
           type: "text",
-          text: `ID: ${bookmark.id}, Title: "${bookmark.title}", URL: ${bookmark.url || 'N/A (folder)'}, Type: ${bookmark.type}`,
-        })),
+          text: `Bookmarks (${bookmarks.length} found):\n\n${bookmarkList}`,
+        }],
       };
     } else {
       return {
