@@ -33,7 +33,7 @@ The MCP server supports the following tools:
 
 #### 1: Install the Firefox 
 
-The Firefox extension / add-on is available on (PENDING VERIFICATION). 
+The Firefox extension / add-on is available on https://addons.mozilla.org/en-US/firefox/addon/browserff-control-mcp/
 
 
 ### 2: Add to claude code
